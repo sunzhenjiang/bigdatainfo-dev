@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>datatables</title>
+	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.jqueryui.min.css" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.jqueryui.min.js"></script>
+</head>
+
+<body>
+	<div class="content">
+		<table id="example" class="cell-border" style="width: 100%">
+			<thead>
+				<tr>
+					<th>日志主键</th>
+					<th>操作</th>
+					<th>申购单</th>
+					<th>赎回单</th>
+					<th>申购子单</th>
+					<th>附加数据</th>
+					<th>操作时间</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>日志主键</th>
+					<th>操作</th>
+					<th>申购单</th>
+					<th>赎回单</th>
+					<th>申购子单</th>
+					<th>附加数据</th>
+					<th>操作时间</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+		var purchase = [[${ purchase }]];
+		var dataUrl = "/all/" + purchase;
+		console.log(dataUrl);
+		$(document).ready(function () {
+			$('#example').DataTable({
+				ajax: {
+					url: dataUrl,
+					dataSrc: ''
+				},
+				"paging": false,
+				"ordering": false,
+				"info": false,
+				"searching": false,
+				columns: [{
+					data: "mid"
+				}, {
+					data: "operation"
+				}, {
+					data: "purchase"
+				}, {
+					data: "redeem"
+				}, {
+					data: "subPurchase"
+				}, {
+					data: "direction"
+				}, {
+					data: "c_Date"
+				}],
+				columnDefs: [
+					{
+						"targets": 1,
+						"data": "operation",
+						"render": function (
+							data, type,
+							row, meta) {
+							var str = "";
+							if (data == 10) {
+								str = "申购";
+							} else if (data == 20) {
+								str = "赎回";
+							} else if (data == 21) {
+								str = "赎回成功债权记录";
+							} else if (data == 30) {
+								str = "匹配";
+							} else if (data == 40) {
+								str = "报备";
+							} else if (data == 41) {
+								str = "已确认结果";
+							} else if (data == 50) {
+								str = "未匹配退回";
+							} else if (data == 51) {
+								str = "差额补贴资金返回";
+							} else if (data == 60) {
+								str = "债权利息";
+							} else if (data == 61) {
+								str = "用户利息";
+							} else if (data == 70) {
+								str = "到期还款";
+							} else if (data == 71) {
+								str = "到期还款";
+							} else if (data == 72) {
+								str = "退回";
+							} else if (data == 80) {
+								str = "取消投资";
+							} else if (data == 90) {
+								str = "资产放款";
+							}
+							return str;
+						}
+					},
+					{
+						"targets": 5,
+						"data": "direction",
+						"render": function (
+							data, type,
+							row, meta) {
+							return data
+								.replace(
+									"Orders",
+									"订单")
+								.replace(
+									"OnSellAssets",
+									"资产")
+								.replace(
+									"TempUserAssetRatios",
+									"临时债权")
+								.replace(
+									"BankStayConfirms",
+									"银行交互")
+								.replace(
+									"UserAssetRatios",
+									"债权关系")
+								.replace(
+									"CancelBookFreezes",
+									"取消预约冻结")
+								.replace(
+									"PreTransactionChangeItems",
+									"报备变更")
+								.replace(
+									"DeptExpireOrders",
+									"债权到期订单");
+						}
+					}]
+			});
+		});
+	</script>
+</body>
+
+</html>

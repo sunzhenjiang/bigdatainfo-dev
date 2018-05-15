@@ -1,0 +1,14 @@
+mybatis.type-aliases-package: com.jinyinmao.api.model
+spring.thymeleaf.cache: false
+spring:
+  datasource:
+    password: Aa123456
+    username: jymadmin
+    url: jdbc:sqlserver://10.1.20.103;DatabaseName=dw
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+server:
+  port: 8066
+info:
+  server
+    port:${server.port}

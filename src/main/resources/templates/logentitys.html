@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/ecmascript" th:src="@{/js/jquery-1.11.0.min.js}"></script>
+<script type="text/ecmascript" th:src="@{/js/grid.locale-cn.js}"></script>
+<script type="text/ecmascript" th:src="@{/js/jquery.jqGrid.min.js}"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen"
+	th:href="@{/css/ui.jqgrid-bootstrap.css}" />
+<script>
+	$.jgrid.defaults.responsive = true;
+	$.jgrid.defaults.styleUI = 'Bootstrap';
+</script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<meta charset="utf-8" />
+<title>余额猫业务日志</title>
+</head>
+<body>
+	<div>
+		<div id="jqGridPager"></div>
+		<table id="jqGrid"></table>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#jqGrid").jqGrid({
+				colModel : [ {
+					label : '日志主键',
+					name : 'mid',
+					width : 80
+				}, {
+					label : '操作类型',
+					name : 'operation',
+					width : 50
+				}, {
+					label : '申购单',
+					name : 'purchase',
+					width : 150
+				}, {
+					label : '赎回单',
+					name : 'redeem',
+					width : 150
+				}, {
+					label : '申购子单',
+					name : 'redeem',
+					width : 150
+				}, {
+					label : '变化金额',
+					name : 'camount',
+					width : 50
+				}, {
+					label : '差额补贴金额',
+					name : 'bmoney',
+					width : 50
+				}, {
+					label : '取消投资金额',
+					name : 'cancelAmount',
+					width : 50
+				}, {
+					label : '取消类型',
+					name : 'cancelType',
+					width : 50
+				}, {
+					label : '取消债权类型',
+					name : 'cancelUAssetRatioType',
+					width : 50
+				}, {
+					label : '取消临时债权对象',
+					name : 'tempUAssetRatioId',
+					width : 150
+				}, {
+					label : '剩余金额',
+					name : 'surplusMoney',
+					width : 50
+				}, {
+					label : '到期总金额',
+					name : 'debtAmount',
+					width : 50
+				}, {
+					label : '投资主线订单',
+					name : 'batchBookOrderId',
+					width : 150
+				}, {
+					label : '批次编号',
+					name : 'batchId',
+					width : 150
+				}, {
+					label : '接收债权主线单',
+					name : 'debtAssignLineOrderId',
+					width : 150
+				}, {
+					label : '赎回主线单',
+					name : 'redeemLineOrderId',
+					width : 150
+				}, {
+					label : '银行交互类型',
+					name : 'transactionType',
+					width : 50
+				}, {
+					label : '未匹配退回主线单',
+					name : 'unMatchBackLineOrderId',
+					width : 150
+				}, {
+					label : '匹配前资产匹配金额',
+					name : 'beforeAssetMatchedAmount',
+					width : 50
+				}, {
+					label : '匹配前资产剩余金额',
+					name : 'beforeAssetRemainningAmount',
+					width : 50
+				}, {
+					label : '匹配前匹配金额',
+					name : 'beforeOrderMatchedAmount',
+					width : 50
+				}, {
+					label : '匹配前剩余金额',
+					name : 'beforeOrderRemainingAmount',
+					width : 50
+				}, {
+					label : '匹配类型',
+					name : 'deptMatchType',
+					width : 50
+				}, {
+					label : '赎回产生订单号',
+					name : 'orderIdFromBatchRedeem',
+					width : 150
+				}, {
+					label : '赎回金额',
+					name : 'redeemAmount',
+					width : 50
+				}, {
+					label : '赎回类型',
+					name : 'redeemType',
+					width : 50
+				}, {
+					label : '赎回债权编号',
+					name : 'uassetRatioId',
+					width : 150
+				}, {
+					label : '操作时间',
+					name : 'c_Date',
+					width : 80
+				} ],
+				page : 1,
+				viewrecords : true,
+				scroll : 1,
+				width : 3096,
+				height : 700,
+				rowNum : 20,
+				datatype : 'local',
+				pager : "#jqGridPager"
+			});
+			fetchGridData();
+			function fetchGridData() {
+				var purchase = "[[${ purchase }]]";
+				var dataUrl = "/all/" + purchase;
+				// show loading message
+				$("#jqGrid")[0].grid.beginReq();
+				$.ajax({
+					url : dataUrl,
+					success : function(result) {
+						console.log(result);
+						$("#jqGrid").jqGrid('setGridParam', {
+							data : result
+						});
+						$("#jqGrid")[0].grid.endReq();
+						$("#jqGrid").trigger('reloadGrid');
+					}
+				});
+			}
+
+			$('#jqGrid').navGrid('#jqGridPager', {
+				edit : false,
+				add : false,
+				del : false,
+				search : true,
+				refresh : true,
+				view : true,
+				position : "left",
+				cloneToTop : false
+			});
+
+		});
+	</script>
+
+
+</body>
+</html>
